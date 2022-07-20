@@ -1,0 +1,71 @@
+openapi: 3.0.0
+info:
+  description: AnnouncementAPI
+  version: "1.0.0"
+  title: AnnouncementContent service API
+paths:
+  /announcements:
+    get:
+      summary: list announcements
+      description: Lists announcement items
+      parameters:
+        - in: query
+          name: offset
+          description: number of page for pagination
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - in: query
+          name: limit
+          description: page size for pagination
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AnnouncementItem'
+        '400':
+          description: 'Input validation error - invalid parameter
+value'
+    post:
+      summary: add an announcement item
+      description: Adds an announcement item to the system
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnnouncementItem' 
+      responses:
+        '200':
+          description: item created
+        '400':
+          description: 'Input validation error - invalid parameter
+value'
+components:
+  schemas:
+    AnnouncementItem:
+      type: object
+      required:
+        - title
+        - description
+        - date
+      properties:
+        title:
+          type: string
+          example: Health Tracker
+        description:
+          type: string
+          example: Upcoming release of the product
+        date:
+          type: string
+          format: date-time
+          example: '2022-06-29T09:12:33.001Z'
